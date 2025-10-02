@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{FD7DA613-1E37-461E-A44A-5553F19FCEEB}</ProjectGuid>
+    <MainSource>wbase.dpr</MainSource>
+    <Base>True</Base>
+    <Config Condition="'$(Config)'==''">Debug</Config>
+    <TargetedPlatforms>1</TargetedPlatforms>
+    <AppType>Application</AppType>
+    <FrameworkType>VCL</FrameworkType>
+    <ProjectVersion>19.5</ProjectVersion>
+    <Platform Condition="'$(Platform)'==''">Win32</Platform>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+    <Base>true</Base>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+    <Base_Win32>true</Base_Win32>
+    <CfgParent>Base</CfgParent>
+    <Base>true</Base>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+    <Cfg_1>true</Cfg_1>
+    <CfgParent>Base</CfgParent>
+    <Base>true</Base>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+    <Cfg_2>true</Cfg_2>
+    <CfgParent>Base</CfgParent>
+    <Base>true</Base>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+    <Cfg_2_Win32>true</Cfg_2_Win32>
+    <CfgParent>Cfg_2</CfgParent>
+    <Cfg_2>true</Cfg_2>
+    <Base>true</Base>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Base)'!=''">
+    <SanitizedProjectName>wbase</SanitizedProjectName>
+    <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
+    <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>wbase.exe</DCC_DependencyCheckOutputName>
+    <DCC_ImageBase>00400000</DCC_ImageBase>
+    <DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
+    <DCC_Platform>x86</DCC_Platform>
+    <DCC_K>false</DCC_K>
+    <DCC_N>false</DCC_N>
+    <DCC_S>false</DCC_S>
+    <DCC_F>false</DCC_F>
+    <DCC_E>false</DCC_E>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Base_Win32)'!=''">
+    <DCC_UsePackage>RESTComponents;vcl;vclimg;vclactnband;vclx;$(DCC_UsePackage)</DCC_UsePackage>
+    <BT_BuildType>Debug</BT_BuildType>
+    <VerInfo_Keys>CompanyName=;FileDescription=WinBASE;FileVersion=1.0.0.0;InternalName=WinBASE;LegalCopyright=;LegalTrademarks=;OriginalFilename=wbase.exe;ProductName=WinBASE;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+    <VerInfo_Locale>1049</VerInfo_Locale>
+    <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Cfg_1)'!=''">
+    <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+    <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_DebugInformation>0</DCC_DebugInformation>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Cfg_2)'!=''">
+    <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    <DCC_Optimize>false</DCC_Optimize>
+    <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+    <DCC_RemoteDebug>true</DCC_RemoteDebug>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <DelphiCompile Include="$(MainSource)">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DelphiCompile Include="wb_registry.pas"/>
+    <DelphiCompile Include="data.pas"/>
+    <DelphiCompile Include="Main.pas">
+      <Form>MainForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_shooter.pas">
+      <Form>ShooterDetailsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_results.pas">
+      <Form>ShooterResultsForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_result.pas">
+      <Form>EditResultDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_startinfo.pas">
+      <Form>StartInfoDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_managestart.pas">
+      <Form>ManageStartForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_selectevent.pas">
+      <Form>SelectEventDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_stats.pas">
+      <Form>ShooterStatsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_table.pas">
+      <Form>RateTableForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_viewresults.pas">
+      <Form>ViewForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_settings.pas">
+      <Form>SettingsForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_eventparams.pas">
+      <Form>EventParamsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_enterresults.pas">
+      <Form>EnterResultsForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_addtostart.pas">
+      <Form>AddToStartDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_teamselect.pas">
+      <Form>TeamSelectDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_relaysetup.pas">
+      <Form>RelaysSetupDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_teams.pas">
+      <Form>TeamsSetupDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_points.pas">
+      <Form>PointsSetupDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_qualifpoints.pas">
+      <Form>QualificationPointsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_eventshooters.pas">
+      <Form>EventShootersForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_relaypos.pas">
+      <Form>RelayPositionDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_start.pas">
+      <Form>StartForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_shooterresults.pas">
+      <Form>ShooterSeriesDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_compresults.pas">
+      <Form>CompetitionResultsForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_printprotocol.pas">
+      <Form>PrintProtocolDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_final.pas">
+      <Form>FinalDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_inputresult.pas">
+      <Form>InputResultDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_selectshooterdialog.pas">
+      <Form>SelectShooterDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_startlistmanager.pas">
+      <Form>StartListManager</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_move.pas">
+      <Form>MoveShootersDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_prefered.pas">
+      <Form>PreferedEventsEditor</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_startshooters.pas">
+      <Form>StartListShootersForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_ascor.pas">
+      <Form>SiusForm</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_printcomplex.pas">
+      <Form>PrintComplexDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_shootingevent.pas">
+      <Form>ShootingEventDetails</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_shootingchamp.pas">
+      <Form>ShootingChampionshipDetails</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="ListBox_Shooters.pas"/>
+    <DelphiCompile Include="form_startstats.pas">
+      <Form>StartListStatsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="wb_barcodes.pas"/>
+    <DelphiCompile Include="wb_seriesedit.pas"/>
+    <DelphiCompile Include="form_printshooterscards.pas">
+      <Form>PrintShootersCardsDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_printfinalnumbers.pas">
+      <Form>PrintFinalNumbersDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="print_results.pas"/>
+    <DelphiCompile Include="form_datepicker.pas">
+      <Form>DatePickerDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="form_selectshooter.pas">
+      <Form>SelectEventShooterDialog</Form>
+    </DelphiCompile>
+    <DelphiCompile Include="OldData.pas"/>
+    <DelphiCompile Include="MyLanguage.pas"/>
+    <DelphiCompile Include="MyListBoxes.pas"/>
+    <DelphiCompile Include="MyPrint.pas"/>
+    <DelphiCompile Include="MyReports.pas"/>
+    <DelphiCompile Include="MyStrings.pas"/>
+    <DelphiCompile Include="MyTable.pas"/>
+    <DelphiCompile Include="MyTables.pas"/>
+    <DelphiCompile Include="PrinterSelector.pas"/>
+    <DelphiCompile Include="SysFont.pas"/>
+    <DelphiCompile Include="calceval.pas"/>
+    <DelphiCompile Include="CRC32.pas"/>
+    <DelphiCompile Include="ctrl_language.pas"/>
+    <DelphiCompile Include="Barcode.pas"/>
+    <DelphiCompile Include="siusdata.pas"/>
+    <!-- Временно исключены проблемные библиотеки -->
+    <!-- <DelphiCompile Include="PNG\pngimage.pas"/> -->
+    <!-- <DelphiCompile Include="PNG\pngextra.pas"/> -->
+    <!-- <DelphiCompile Include="PNG\pnglang.pas"/> -->
+    <!-- <DelphiCompile Include="PNG\zlibpas.pas"/> -->
+    <!-- <DelphiCompile Include="llpdf\PDF.pas"/> -->
+    <BuildConfiguration Include="Base">
+      <Key>Base</Key>
+    </BuildConfiguration>
+    <BuildConfiguration Include="Release">
+      <Key>Cfg_1</Key>
+      <CfgParent>Base</CfgParent>
+    </BuildConfiguration>
+    <BuildConfiguration Include="Debug">
+      <Key>Cfg_2</Key>
+      <CfgParent>Base</CfgParent>
+    </BuildConfiguration>
+  </ItemGroup>
+  
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+      <Delphi.Personality>
+        <Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">5</VersionInfo>
+          <VersionInfo Name="Release">4</VersionInfo>
+          <VersionInfo Name="Build">15</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1049</VersionInfo>
+          <VersionInfo Name="CodePage">1251</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription">WinBASE - Система управления стрелковыми соревнованиями</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.5.4.15</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName">WinBASE</VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename">wbase.exe</VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName">WinBASE</VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.5.4.15</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments">Портирована на Delphi 12</VersionInfoKeys>
+        </VersionInfoKeys>
+        <Source>
+          <Source Name="MainSource">wbase.dpr</Source>
+        </Source>
+      </Delphi.Personality>
+      <Platforms>
+        <Platform value="Win32">True</Platform>
+      </Platforms>
+    </BorlandProject>
+    <ProjectFileVersion>12</ProjectFileVersion>
+  </ProjectExtensions>
+  
+  <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+  <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>

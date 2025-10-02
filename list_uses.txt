@@ -1,0 +1,13 @@
+MyLanguage=1
+MyStrings=1
+PDF=1
+calceval=1
+MyReports=1
+MyTables=1
+MyPrint=1
+ZLib=1
+CRC32=1
+Barcode=1
+MyTable=1
+MyListBoxes=1
+PNGimage=1

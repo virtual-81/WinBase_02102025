@@ -1,0 +1,30 @@
+# Delphi / C++Builder
+*.dcu
+*.dcp
+*.dcpil
+*.bpl
+*.drc
+*.map
+*.exe
+*.dll
+*.pdb
+*.dres
+*.local
+*.identcache
+*.tvsconfig
+*.stat
+*.res
+*.rsm
+*.~*
+
+# VS Code
+.vscode/
+
+# Build artifacts
+/Win32/
+/Win64/
+/**/*.exe
+/**/*.drc
+
+# Images cache
+/images/

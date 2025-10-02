@@ -1,0 +1,4 @@
+1 BITMAP "photo.bmp"
+4 BITMAP "results.bmp"
+SPLASH_RUS RCDATA "splash_rus.png"
+SPLASH_ENG RCDATA "splash_eng.png"

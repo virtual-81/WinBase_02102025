@@ -1,0 +1,49 @@
+object SelectEventShooterDialog: TSelectEventShooterDialog
+  Left = 0
+  Top = 0
+  BorderWidth = 16
+  Caption = 'SelectEventShooterDialog'
+  ClientHeight = 385
+  ClientWidth = 674
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnResize = FormResize
+  PixelsPerInch = 106
+  TextHeight = 14
+  object lbShooters: TListBox
+    Left = 0
+    Top = 0
+    Width = 671
+    Height = 326
+    AutoComplete = False
+    ItemHeight = 14
+    TabOrder = 0
+    OnDblClick = lbShootersDblClick
+  end
+  object btnOk: TButton
+    Left = 463
+    Top = 345
+    Width = 92
+    Height = 30
+    Caption = 'OK'
+    Default = True
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object btnCancel: TButton
+    Left = 571
+    Top = 345
+    Width = 92
+    Height = 30
+    Cancel = True
+    Caption = #1054#1090#1084#1077#1085#1072
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

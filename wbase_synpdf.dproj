@@ -1,0 +1,219 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{92D8563E-9F3D-4B7F-8D79-DAF7A6740A51}</ProjectGuid>
+        <MainSource>wbase_synpdf.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Base</Config>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <ProjectVersion>20.1</ProjectVersion>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <ProjectName Condition="'$(ProjectName)'==''">wbase_synpdf</ProjectName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>wbase_synpdf</SanitizedProjectName>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <BT_BuildType>Debug</BT_BuildType>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Locale>1049</VerInfo_Locale>
+        <Manifest_File>(None)</Manifest_File>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <DCC_Define>USEDELPHIZLIB;$(DCC_Define)</DCC_Define>
+        <DCC_UnitSearchPath>c:\WORK_MY\winbase_7to12\vendor\SynPDF-master\SynPDF-master;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_IncludePath>c:\WORK_MY\winbase_7to12\vendor\SynPDF-master\SynPDF-master;$(DCC_IncludePath)</DCC_IncludePath>
+        <DCC_ObjPath>c:\WORK_MY\winbase_7to12\vendor\SynPDF-master\SynPDF-master;$(DCC_ObjPath)</DCC_ObjPath>
+        <DCC_ResourcePath>c:\WORK_MY\winbase_7to12\vendor\SynPDF-master\SynPDF-master;$(DCC_ResourcePath)</DCC_ResourcePath>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynPdf.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynGdiPlus.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynCrypto.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynZip.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynLZ.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynCommons.pas"/>
+        <DCCReference Include="vendor\SynPDF-master\SynPDF-master\SynTable.pas"/>
+        <DCCReference Include="wb_registry.pas"/>
+        <DCCReference Include="data.pas"/>
+        <DCCReference Include="Main.pas">
+            <Form>MainForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_shooter.pas">
+            <Form>ShooterDetailsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_results.pas">
+            <Form>ShooterResultsForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_result.pas">
+            <Form>EditResultDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_startinfo.pas">
+            <Form>StartInfoDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_managestart.pas">
+            <Form>ManageStartForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_selectevent.pas">
+            <Form>SelectEventDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_stats.pas">
+            <Form>ShooterStatsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_table.pas">
+            <Form>RateTableForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_viewresults.pas">
+            <Form>ViewForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_settings.pas">
+            <Form>SettingsForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_eventparams.pas">
+            <Form>EventParamsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_enterresults.pas">
+            <Form>EnterResultsForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_addtostart.pas">
+            <Form>AddToStartDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_teamselect.pas">
+            <Form>TeamSelectDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_relaysetup.pas">
+            <Form>RelaysSetupDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_teams.pas">
+            <Form>TeamsSetupDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_points.pas">
+            <Form>PointsSetupDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_qualifpoints.pas">
+            <Form>QualificationPointsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_eventshooters.pas">
+            <Form>EventShootersForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_relaypos.pas">
+            <Form>RelayPositionDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_start.pas">
+            <Form>StartForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_shooterresults.pas">
+            <Form>ShooterSeriesDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_compresults.pas">
+            <Form>CompetitionResultsForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_printprotocol.pas">
+            <Form>PrintProtocolDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_final.pas">
+            <Form>FinalDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_inputresult.pas">
+            <Form>InputResultDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_selectshooterdialog.pas">
+            <Form>SelectShooterDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_startlistmanager.pas">
+            <Form>StartListManager</Form>
+        </DCCReference>
+        <DCCReference Include="form_move.pas">
+            <Form>MoveShootersDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_prefered.pas">
+            <Form>PreferedEventsEditor</Form>
+        </DCCReference>
+        <DCCReference Include="form_startshooters.pas">
+            <Form>StartListShootersForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_ascor.pas">
+            <Form>SiusForm</Form>
+        </DCCReference>
+        <DCCReference Include="form_printcomplex.pas">
+            <Form>PrintComplexDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_shootingevent.pas">
+            <Form>ShootingEventDetails</Form>
+        </DCCReference>
+        <DCCReference Include="form_shootingchamp.pas">
+            <Form>ShootingChampionshipDetails</Form>
+        </DCCReference>
+        <DCCReference Include="ListBox_Shooters.pas"/>
+        <DCCReference Include="form_startstats.pas">
+            <Form>StartListStatsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="wb_barcodes.pas"/>
+        <DCCReference Include="wb_seriesedit.pas"/>
+        <DCCReference Include="form_printshooterscards.pas">
+            <Form>PrintShootersCardsDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_printfinalnumbers.pas">
+            <Form>PrintFinalNumbersDialog</Form>
+        </DCCReference>
+        <DCCReference Include="print_results.pas"/>
+        <DCCReference Include="form_datepicker.pas">
+            <Form>DatePickerDialog</Form>
+        </DCCReference>
+        <DCCReference Include="form_selectshooter.pas">
+            <Form>SelectEventShooterDialog</Form>
+        </DCCReference>
+        <DCCReference Include="OldData.pas"/>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">wbase_synpdf.dpr</Source>
+                </Source>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+                    <VersionInfo Name="MajorVer">1</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">0</VersionInfo>
+                    <VersionInfo Name="Build">0</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">1049</VersionInfo>
+                    <VersionInfo Name="CodePage">1251</VersionInfo>
+                </VersionInfo>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>
