@@ -76,6 +76,7 @@ type
     lPerTeam: TLabel;
   btnPrint: TButton;
   btnImportApplications: TButton;
+    btnNormalizeSurnames: TButton;
     pnlQPoints: TPanel;
     btnQualificationPoints: TButton;
     lQPointsC: TLabel;
@@ -134,6 +135,7 @@ type
     procedure btnTeamsClick(Sender: TObject);
   procedure btnPrintClick(Sender: TObject);
   procedure btnImportApplicationsClick(Sender: TObject);
+    procedure btnNormalizeSurnamesClick(Sender: TObject);
     procedure btnQualificationPointsClick(Sender: TObject);
     procedure pnlQPointsResize(Sender: TObject);
     procedure lbEventsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -209,6 +211,7 @@ type
     procedure WMBCShooterCard (var M: TMessage); message WM_BC_SHOOTERCARD;
     procedure SetQualificationTens (index: integer; value: boolean);
     procedure CleanupDanglingStartShooters;
+  function NormalizeAllShooterSurnames: Integer;
   public
     { Public declarations }
     property Start: TStartList read fStart write set_StartList;
@@ -578,6 +581,14 @@ begin
   end;
 end;
 
+function TManageStartForm.NormalizeAllShooterSurnames: Integer;
+begin
+  if (fStart <> nil) and (fStart.Data <> nil) then
+    Result := fStart.Data.NormalizeAllShooterSurnames
+  else
+    Result := 0;
+end;
+
 procedure TManageStartForm.UpdateFonts;
 var
   bh,w,w1: integer;
@@ -639,6 +650,8 @@ begin
   btnPrint.ClientHeight:= bh;
   btnImportApplications.ClientWidth:= Canvas.TextWidth (btnImportApplications.Caption)+32;
   btnImportApplications.ClientHeight:= bh;
+  btnNormalizeSurnames.ClientWidth := Canvas.TextWidth(btnNormalizeSurnames.Caption)+32;
+  btnNormalizeSurnames.ClientHeight := bh;
   if pnlStart.ClientHeight< 8+btnChangeInfo.Height+8+btnPrint.Height+8 then
     pnlStart.ClientHeight:= 8+btnChangeInfo.Height+8+btnPrint.Height+8;
   w:= lTeamsC.Width;
@@ -953,8 +966,15 @@ begin
   btnChangeInfo.Top:= btnPrint.Top-8-btnChangeInfo.Height;
   btnImportApplications.Top:= btnPrint.Top;
   btnImportApplications.Left:= btnPrint.Left-btnImportApplications.Width-8;
+  btnNormalizeSurnames.Top:= btnPrint.Top;
+  btnNormalizeSurnames.Left:= btnImportApplications.Left-btnNormalizeSurnames.Width-8;
+  if btnNormalizeSurnames.Left < 16 then
+  begin
+    btnNormalizeSurnames.Left := 16;
+    btnImportApplications.Left := btnNormalizeSurnames.Left + btnNormalizeSurnames.Width + 8;
+  end;
   if btnImportApplications.Left < 16 then
-    btnImportApplications.Left:= 16;
+    btnImportApplications.Left := 16;
 end;
 
 procedure TManageStartForm.pnlTeamsResize(Sender: TObject);
@@ -993,6 +1013,10 @@ type
     Header: string;
   end;
   TStringArray = array of string;
+  TEventStatInfo = record
+    Name: string;
+    Count: Integer;
+  end;
 var
   OpenDialog: TOpenDialog;
   ExcelApp, Workbook, Worksheet: OleVariant;
@@ -1025,6 +1049,9 @@ var
   UsedRange: OleVariant;
   EventColumns: array of TEventColumnInfo;
   EventAssignmentCount, EventSkippedCount: Integer;
+  EventParticipantStats: TStringList;
+  EventStats: array of TEventStatInfo;
+  SurnameNormalizedCount: Integer;
   HeaderRow, DataStartRow, UsedCols: Integer;
 
   function Normalize(const S: string): string;
@@ -1645,6 +1672,50 @@ var
     end;
   end;
 
+  procedure IncrementEventStat(const EventName: string);
+  var
+    Count: Integer;
+  begin
+    if EventParticipantStats = nil then
+      Exit;
+    if Trim(EventName) = '' then
+      Exit;
+    Count := StrToIntDef(EventParticipantStats.Values[EventName], 0);
+    Inc(Count);
+    EventParticipantStats.Values[EventName] := IntToStr(Count);
+  end;
+
+  procedure PrepareEventStats;
+  var
+    StatIdx, OtherIdx: Integer;
+    Temp: TEventStatInfo;
+  begin
+    if EventParticipantStats = nil then
+    begin
+      SetLength(EventStats, 0);
+      Exit;
+    end;
+
+    SetLength(EventStats, EventParticipantStats.Count);
+    for StatIdx := 0 to EventParticipantStats.Count - 1 do
+    begin
+      EventStats[StatIdx].Name := EventParticipantStats.Names[StatIdx];
+      EventStats[StatIdx].Count := StrToIntDef(EventParticipantStats.ValueFromIndex[StatIdx], 0);
+    end;
+
+    for StatIdx := 0 to High(EventStats) - 1 do
+      for OtherIdx := StatIdx + 1 to High(EventStats) do
+        if (EventStats[OtherIdx].Count > EventStats[StatIdx].Count) or
+           ((EventStats[OtherIdx].Count = EventStats[StatIdx].Count) and
+            (CompareText(EventStats[OtherIdx].Name, EventStats[StatIdx].Name) < 0)) then
+        begin
+          Temp := EventStats[StatIdx];
+          EventStats[StatIdx] := EventStats[OtherIdx];
+          EventStats[OtherIdx] := Temp;
+        end;
+  end;
+
+
   function EnsureStartListEvent(const Header: string; AGender: TGender; ARow: Integer; out WasCreated: Boolean): TStartListEventItem;
   var
     Keys: TStringArray;
@@ -1673,8 +1744,6 @@ var
     Result.ProtocolNumber := fStart.GetNextProtocolNumber;
     Result.Event := DataEvent;
     WasCreated := True;
-    if LogLines <> nil then
-      LogLines.Add(Format('Строка %d: создано упражнение "%s"', [ARow, DataEvent.ShortName]));
     if EventCreatedList.IndexOf(DataEvent.ShortName) = -1 then
       EventCreatedList.Add(DataEvent.ShortName);
   end;
@@ -1750,6 +1819,7 @@ var
 
       EventShooter := TargetEvent.Shooters.Add;
       EventShooter.StartListShooter := StartListShooter;
+      IncrementEventStat(TargetEvent.Event.ShortName);
 
       EventAssignedList.Add(Format('Строка %d: %s → %s', [ARow, ShooterName, TargetEvent.Event.ShortName]));
       Inc(EventAssignmentCount);
@@ -1767,6 +1837,8 @@ begin
   EventAssignedList := TStringList.Create;
   EventSkippedList := TStringList.Create;
   EventCreatedList := TStringList.Create;
+  EventParticipantStats := TStringList.Create;
+  EventParticipantStats.NameValueSeparator := '=';
   ExcelApp := Unassigned;
   Workbook := Unassigned;
   Worksheet := Unassigned;
@@ -1863,14 +1935,6 @@ begin
         end;
       end;
 
-      if (LogLines <> nil) and (Length(EventColumns) > 0) then
-      begin
-        LogLines.Add('');
-        LogLines.Add('Обнаружены столбцы упражнений:');
-        for I := 0 to High(EventColumns) do
-          LogLines.Add(Format('  Колонка %d: %s', [EventColumns[I].ColumnIndex, EventColumns[I].Header]));
-      end;
-
       Row := DataStartRow;
       EmptyRowCounter := 0;
       while EmptyRowCounter < MaxEmptyRowsBeforeStop do
@@ -1914,7 +1978,7 @@ begin
           Continue;
         end;
 
-    LastName := UpperCase(Trim(LastName));
+        LastName := UpperCase(Trim(LastName));
 
         if not TryParseBirthDate(BirthValue, BirthDate, BirthDateStr) then
         begin
@@ -2080,82 +2144,60 @@ begin
         Inc(Row);
       end;
 
-      ShortSummary := Format('Обработано: %d; добавлено: %d; обновлено: %d; пропущено: %d; новые группы: %d; не обработано (оружие): %d; конфликты дат: %d; добавлено в упражнения: %d; новые упражнения: %d; упражнения не найдены: %d',
-        [ProcessedCount, ImportedCount, UpdatedCount, SkippedCount, CreatedGroups, NotProcessedCount, BirthConflictCount, EventAssignmentCount, EventCreatedList.Count, EventSkippedCount]);
+      SurnameNormalizedCount := NormalizeAllShooterSurnames;
+
+      ShortSummary := Format('Обработано: %d; добавлено: %d; обновлено: %d; пропущено: %d; новые группы: %d; не обработано (оружие): %d; конфликты дат: %d; добавлено в упражнения: %d; новые упражнения: %d; упражнения не найдены: %d; фамилий исправлено: %d',
+        [ProcessedCount, ImportedCount, UpdatedCount, SkippedCount, CreatedGroups, NotProcessedCount, BirthConflictCount, EventAssignmentCount, EventCreatedList.Count, EventSkippedCount, SurnameNormalizedCount]);
 
       ResultMsg := 'Импорт завершен.'#13#10 + ShortSummary;
 
+      if SurnameNormalizedCount > 0 then
+        ResultMsg := ResultMsg + Format(#13#10'Фамилии приведены к верхнему регистру: %d', [SurnameNormalizedCount]);
+
       if NotProcessedCount > 0 then
       begin
-        LinesToShow := NotProcessedList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Не обработано из-за конфликта вида оружия: %d', [NotProcessedCount]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + NotProcessedList[I];
-        if NotProcessedCount > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [NotProcessedCount - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Не обработано из-за конфликта вида оружия: %d (детали в логе)', [NotProcessedCount]);
       end;
 
       if BirthConflictCount > 0 then
       begin
-        LinesToShow := BirthConflictList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Конфликты даты рождения: %d', [BirthConflictCount]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + BirthConflictList[I];
-        if BirthConflictCount > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [BirthConflictCount - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Конфликты даты рождения: %d (детали в логе)', [BirthConflictCount]);
       end;
 
       if AnomalyList.Count > 0 then
       begin
-        LinesToShow := AnomalyList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Странные несоответствия: %d', [AnomalyList.Count]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + AnomalyList[I];
-        if AnomalyList.Count > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [AnomalyList.Count - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Странные несоответствия: %d (детали в логе)', [AnomalyList.Count]);
       end;
 
       if EventAssignmentCount > 0 then
       begin
-        LinesToShow := EventAssignedList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Добавлены в упражнения: %d', [EventAssignmentCount]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + EventAssignedList[I];
-        if EventAssignmentCount > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [EventAssignmentCount - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Добавлены в упражнения: %d (детали в логе)', [EventAssignmentCount]);
       end;
 
       if EventCreatedList.Count > 0 then
       begin
-        LinesToShow := EventCreatedList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Создано упражнений: %d', [EventCreatedList.Count]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + EventCreatedList[I];
-        if EventCreatedList.Count > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [EventCreatedList.Count - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Создано упражнений: %d (детали в логе)', [EventCreatedList.Count]);
       end;
 
       if EventSkippedCount > 0 then
       begin
-        LinesToShow := EventSkippedList.Count;
-        if LinesToShow > 3 then
-          LinesToShow := 3;
-        ResultMsg := ResultMsg + Format(#13#10'Упражнения без совпадений: %d', [EventSkippedCount]);
-        for I := 0 to LinesToShow - 1 do
-          ResultMsg := ResultMsg + #13#10 + '  • ' + EventSkippedList[I];
-        if EventSkippedCount > LinesToShow then
-          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d записей', [EventSkippedCount - LinesToShow]);
+        ResultMsg := ResultMsg + Format(#13#10'Упражнения без совпадений: %d (детали в логе)', [EventSkippedCount]);
       end;
+
+      if (EventParticipantStats <> nil) and (EventParticipantStats.Count > 0) then
+      begin
+        PrepareEventStats;
+        LinesToShow := Length(EventStats);
+        if LinesToShow > 5 then
+          LinesToShow := 5;
+        ResultMsg := ResultMsg + #13#10'Статистика по упражнениям:';
+        for I := 0 to LinesToShow - 1 do
+          ResultMsg := ResultMsg + Format(#13#10'  • %s — %d', [EventStats[I].Name, EventStats[I].Count]);
+        if Length(EventStats) > LinesToShow then
+          ResultMsg := ResultMsg + Format(#13#10'  ... и ещё %d упражнений', [Length(EventStats) - LinesToShow]);
+      end
+      else
+        SetLength(EventStats, 0);
 
       if LogLines <> nil then
       begin
@@ -2163,6 +2205,8 @@ begin
         LogLines.Add(ShortSummary);
         if CreatedGroups > 0 then
           LogLines.Add(Format('Создано новых групп: %d', [CreatedGroups]));
+        if SurnameNormalizedCount > 0 then
+          LogLines.Add(Format('Фамилии приведены к верхнему регистру: %d', [SurnameNormalizedCount]));
         if UpdatedCount > 0 then
         begin
           LogLines.Add('Измененные участники:');
@@ -2187,17 +2231,17 @@ begin
           for I := 0 to AnomalyList.Count - 1 do
             LogLines.Add('  ' + AnomalyList[I]);
         end;
-        if EventAssignmentCount > 0 then
-        begin
-          LogLines.Add('Добавлены в упражнения:');
-          for I := 0 to EventAssignedList.Count - 1 do
-            LogLines.Add('  ' + EventAssignedList[I]);
-        end;
         if EventCreatedList.Count > 0 then
         begin
           LogLines.Add('Созданы новые упражнения:');
           for I := 0 to EventCreatedList.Count - 1 do
             LogLines.Add('  ' + EventCreatedList[I]);
+        end;
+        if Length(EventStats) > 0 then
+        begin
+          LogLines.Add('Статистика участников по упражнениям:');
+          for I := 0 to Length(EventStats) - 1 do
+            LogLines.Add(Format('  %s — %d', [EventStats[I].Name, EventStats[I].Count]));
         end;
         if EventSkippedCount > 0 then
         begin
@@ -2251,6 +2295,7 @@ begin
     EventAssignedList.Free;
     EventSkippedList.Free;
     EventCreatedList.Free;
+    EventParticipantStats.Free;
     OpenDialog.Free;
   end;
 
@@ -2269,6 +2314,23 @@ begin
   begin
     LogLines.Free;
   end;
+end;
+
+procedure TManageStartForm.btnNormalizeSurnamesClick(Sender: TObject);
+var
+  Changed: Integer;
+begin
+  Changed := NormalizeAllShooterSurnames;
+  if Changed > 0 then
+  begin
+    UpdateStartInfo;
+    if Assigned(MainForm) then
+      MainForm.RefreshGroupTree;
+    lbEvents.Invalidate;
+    ShowMessage(Format('Фамилии приведены к верхнему регистру: %d', [Changed]));
+  end
+  else
+    ShowMessage('Все фамилии уже были в верхнем регистре.');
 end;
 
 procedure TManageStartForm.ViewShooters(Index: integer);

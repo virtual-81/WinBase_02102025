@@ -20,7 +20,7 @@ uses
   System.DateUtils,
   MyStrings,
   Vcl.Printers,
-  // PDF, // Временно отключено
+  // PDF, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   System.Win.Registry,
   wb_registry,
   MyLanguage,
@@ -34,12 +34,12 @@ uses
   MyTable,
   OldData;
 
-// TODO: Рейтинг в соревнованиях ИССФ
-// TODO: Интервалы Стрельбы и соревнования
-// TODO: Быстрый Объединения протокол
-// TODO: Графики в соревнованиях протоколы страниц протоколе для стрельбы - в результаты в журнал
-// TODO: Графики соревнований страниц итог с базовые (не нулевыми) и в базовых соревнованиях (нулевыми) итог
-// TODO: При стрельбы базовых итог соревнований, при стрельбы не базовыми не стрелковых не стрелковых
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 type
   TLanguage= (lRussian,lEnglish,lUnknown);
@@ -62,32 +62,32 @@ const
   VERSION_INFO_STR= '1.5.9.2';
 
 const
-  OUT_OF_RANK_MARK: string= 'ВЗ';
-  NOT_FOR_TEAM_MARK: string= 'ЛК';
-  PROTOCOL_MAKER_SIGN: string= 'Секретарь: _________________ (подпись, печать)';
-  DNS_MARK: string= 'неявка';
-  DELETED_CHAMPIONSHIP_MARK: string= '<удаленный чемпионат>';
-  DELETED_EVENT_MARK: string= '<удаленное упражнение>';
-  NEW_DATA_NAME: string= 'Новая база';
-  ALL_RESULTS_PDF_CAPTION: string= 'WinBASE - все результаты, %s ';
-  START_LIST_PAGE_TITLE: string= 'Стартовый протокол';
-  PAGE_NO: string= 'Страница %d';
-  PAGE_FOOTER: string= 'WinBASE %s спортивное программное обеспечение, Беларусь, 2006-2007';
-  START_LIST_CONTINUE_MARK: string= '...продолжение';
-  RF_START_TIME_1: string= 'Время  hh:mm';
-  RF_START_TIME_2: string= 'Время  hh:mm';
-  FINAL_TIME: string= 'Финал  hh:mm';
-  FINAL_DATETIME: string= 'Финал  d-mm-yyyy, hh:nn';
-  RELAY_NO: string= 'Эстафета %d';
-  MT_RELAY_NO: string= 'Микстовая %d';
-  SECRETERY_TITLE: string= 'Главный секретарь соревнований,';
-  START_LIST_PRINT_TITLE: string= 'WinBASE - стартовый протокол и результаты %s';
-  START_TIME: string= 'Старт  hh:nn';
-  CF_START_TIME_1: string= 'Старт ФР  hh:nn';
-  CF_START_DATETIME_1: string= 'Старт ФР  d-mm-yyyy, hh:nn';
-  CF_START_TIME_2: string= 'Старт ФФ  hh:nn';
-  CF_START_DATETIME_2: string= 'Старт ФФ  d-mm-yyyy, hh:nn';
-  PROTOCOL_NO: string= 'Протокол №%d';
+  OUT_OF_RANK_MARK: string= 'пїЅпїЅ';
+  NOT_FOR_TEAM_MARK: string= 'пїЅпїЅ';
+  PROTOCOL_MAKER_SIGN: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: _________________ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ)';
+  DNS_MARK: string= 'пїЅпїЅпїЅпїЅпїЅпїЅ';
+  DELETED_CHAMPIONSHIP_MARK: string= '<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>';
+  DELETED_EVENT_MARK: string= '<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>';
+  NEW_DATA_NAME: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ';
+  ALL_RESULTS_PDF_CAPTION: string= 'WinBASE - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, %s ';
+  START_LIST_PAGE_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+  PAGE_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  PAGE_FOOTER: string= 'WinBASE %s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 2006-2007';
+  START_LIST_CONTINUE_MARK: string= '...пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+  RF_START_TIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  RF_START_TIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  FINAL_TIME: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  FINAL_DATETIME: string= 'пїЅпїЅпїЅпїЅпїЅ  d-mm-yyyy, hh:nn';
+  RELAY_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  MT_RELAY_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  SECRETERY_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,';
+  START_LIST_PRINT_TITLE: string= 'WinBASE - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s';
+  START_TIME: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:nn';
+  CF_START_TIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  hh:nn';
+  CF_START_DATETIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  d-mm-yyyy, hh:nn';
+  CF_START_TIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  hh:nn';
+  CF_START_DATETIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  d-mm-yyyy, hh:nn';
+  PROTOCOL_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ%d';
   FINAL_SHOTS_: string= 'пїЅпїЅпїЅпїЅпїЅ: ';
   FINAL_SHOOTOFF: string= '(пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s)';
   TEAM_CHAMPIONSHIP_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
@@ -985,11 +985,12 @@ type
     property DistrictFull: string read get_DistrictFull;
     property BirthYearStr: string read get_BirthYearStr write set_BirthYearStr;
     property BirthDateStr: string read get_BirthDateStr write set_BirthDateStr;
-  // Полная дата рождения: 'ДД.ММ.ГГГГ' если день/месяц/год заданы, иначе возвращает только год или пусто
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: 'пїЅпїЅ.пїЅпїЅ.пїЅпїЅпїЅпїЅ' пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   property BirthFullStr: string read get_BirthFullStr write set_BirthFullStr;
     property BirthYear: word read fBirthYear write set_BirthYear;
     procedure Assign (Source: TPersistent); override;
     function Shooters: TShooters;
+  function NormalizeSurname: boolean;
     property WasChanged: boolean read get_WasChanged;
     property Marked: integer read fMarked write set_Marked;
     property SportSociety: TSportSocietyItem read fSociety write set_Society;
@@ -1176,6 +1177,7 @@ type
     procedure ExportToCSV (ConsoleOutput: boolean);
     procedure ReadFromStream (Stream: TStream);
     procedure WriteToStream (Stream: TStream; SaveStartLists: boolean= true; SavePersonalInfo: boolean= true);
+    function NormalizeAllShooterSurnames: Integer;
   end;
 
   TStartListQualificationPoints= class
@@ -2042,6 +2044,13 @@ implementation
 uses
   wb_barcodes;
 
+function NormalizeShooterSurname(const Value: string): string;
+begin
+  Result := Trim(Value);
+  if Result <> '' then
+    CharUpperBuff(PChar(Result), Length(Result));
+end;
+
 procedure GetDefaultProtocolFont (var name: string; var size: integer);
 var
   Reg: TRegistry;
@@ -2302,7 +2311,7 @@ var
 begin
   if S <> '' then
   begin
-    // Конвертируем Unicode в Windows-1251 для сохранения
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Unicode пїЅ Windows-1251 пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     AnsiBytes := TEncoding.GetEncoding(1251).GetBytes(S);
     l := Length(AnsiBytes);
     Stream.Write (l,sizeof (l));
@@ -2325,7 +2334,7 @@ begin
   begin
     SetLength(AnsiBytes, l);
     Stream.Read (AnsiBytes[0], l);
-    // Конвертируем из Windows-1251 в Unicode
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ Windows-1251 пїЅ Unicode
     S := TEncoding.GetEncoding(1251).GetString(AnsiBytes);
   end
   else
@@ -2345,7 +2354,7 @@ begin
   if pos ('.',s)= 0 then
     begin
       val (s,i,n);
-      if n = 0 then  // проверка успешности преобразования
+      if n = 0 then  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         Result:= i * 10;
     end
   else
@@ -5647,6 +5656,7 @@ begin
     del:= false;
   ReadStrFromStreamA (Stream,fISSFID);
   ReadStrFromStreamA (Stream,fSurname);
+  fSurname:= NormalizeShooterSurname(fSurname);
   ReadStrFromStreamA (Stream,fName);
   ReadStrFromStreamA (Stream,fStepName);
   Stream.Read (fGender,sizeof (fGender));
@@ -5791,14 +5801,14 @@ end;
 function TShooterItem.SurnameAndName (Separator: string= ','): string;
 begin
   if fName<> '' then
-    Result:= fSurname+Separator+' '+fName
+    Result:= NormalizeShooterSurname(fSurname)+Separator+' '+fName
   else
-    Result:= fSurname;
+    Result:= NormalizeShooterSurname(fSurname);
 end;
 
 function TShooterItem.SurnameAndNameAndStepName: string;
 begin
-  Result:= fSurname;
+  Result:= NormalizeShooterSurname(fSurname);
   if fName<> '' then
     Result:= Result+' '+fName;
   if fStepName<> '' then
@@ -5976,10 +5986,10 @@ begin
     Exit;
   end;
 
-  // Поддержка форматов:
-  // 1) ДД.ММ.ГГГГ или ДД.ММ.ГГ
-  // 2) ДДММГГ или ДДММГГГГ (без точек)
-  // 3) ГГГГ (только год)
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:
+  // 1) пїЅпїЅ.пїЅпїЅ.пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ.пїЅпїЅ.пїЅпїЅ
+  // 2) пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
+  // 3) пїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ)
   if Pos('.', s) > 0 then
   begin
     val(substr(s, '.', 1), d, code);
@@ -5993,20 +6003,20 @@ begin
   begin
     if Length(s)=4 then
     begin
-      // только год (может быть 2-значный, но покрыто общим правилом ниже)
+      // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 2-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)
       val(s, y, code);
       d := 0; m := 0;
     end
     else if Length(s)=6 then
     begin
-      // ДДММГГ
+      // пїЅпїЅпїЅпїЅпїЅпїЅ
       val(Copy(s,1,2), d, code); if code<>0 then d := 0;
       val(Copy(s,3,2), m, code); if code<>0 then m := 0;
       val(Copy(s,5,2), y, code); if code<>0 then y := 0;
     end
     else // 8
     begin
-      // ДДММГГГГ
+      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       val(Copy(s,1,2), d, code); if code<>0 then d := 0;
       val(Copy(s,3,2), m, code); if code<>0 then m := 0;
       val(Copy(s,5,4), y, code); if code<>0 then y := 0;
@@ -6014,18 +6024,18 @@ begin
   end
   else
   begin
-    // fallback: попытка сконвертировать как год
+    // fallback: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
     val(s, y, code);
     d := 0; m := 0;
   end;
 
   y := NormalizeYear(y);
 
-  // Небольшая нормализация: проверка диапазонов
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   if (m<1) or (m>12) then m := 0;
   if (d<1) or (d>31) then d := 0;
 
-  // Строгая проверка валидности комбинации дня/месяца (31.02 и пр.)
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ (31.02 пїЅ пїЅпїЅ.)
   if (d>0) and (m>0) then
   begin
     var ytmp := y; if ytmp=0 then ytmp := 2000;
@@ -6137,11 +6147,27 @@ begin
   fMemo:= '';
 end;
 
-procedure TShooterItem.set_Surname(const Value: string);
+function TShooterItem.NormalizeSurname: boolean;
+var
+  Normalized: string;
 begin
-  if Value<> fSurname then
+  Normalized := NormalizeShooterSurname(fSurname);
+  Result := Normalized <> fSurname;
+  if Result then
     begin
-      fSurname := Value;
+      fSurname := Normalized;
+      Changed;
+    end;
+end;
+
+procedure TShooterItem.set_Surname(const Value: string);
+var
+  Normalized: string;
+begin
+  Normalized := NormalizeShooterSurname(Value);
+  if Normalized<> fSurname then
+    begin
+      fSurname := Normalized;
       Changed;
     end;
 end;
@@ -7768,6 +7794,11 @@ begin
       fShootingChampionships.ReadFromStream (Stream);
     end;
   fGroups.ReadFromStream (Stream);
+  begin
+    var NormalizedCount := NormalizeAllShooterSurnames;
+    if NormalizedCount > 0 then
+      fChanged := true;
+  end;
   for i:= 0 to fEvents.Count-1 do
     fEvents.Items [i].CorrectTag;
   if fFileVersion>= 8 then
@@ -7786,6 +7817,34 @@ end;
 procedure TData.ResetRatings;
 begin
   fGroups.ResetRatings;
+end;
+
+function TData.NormalizeAllShooterSurnames: Integer;
+var
+  GroupIndex, ShooterIndex: Integer;
+  GroupItem: TGroupItem;
+  ShooterItem: TShooterItem;
+begin
+  Result := 0;
+  if fGroups = nil then
+    Exit;
+
+  for GroupIndex := 0 to fGroups.Count - 1 do
+  begin
+    GroupItem := fGroups.Items[GroupIndex];
+    if GroupItem = nil then
+      Continue;
+
+    for ShooterIndex := 0 to GroupItem.Shooters.Count - 1 do
+    begin
+      ShooterItem := GroupItem.Shooters.Items[ShooterIndex];
+      if ShooterItem = nil then
+        Continue;
+
+      if ShooterItem.NormalizeSurname then
+        Inc(Result);
+    end;
+  end;
 end;
 
 procedure TData.SaveToFile (FileName: TFileName; SaveStartLists: boolean= true; SavePersonalInfo: boolean= true);
@@ -8792,27 +8851,27 @@ var
             TextOut (x,y,st);
             inc (y,TextHeight (st));
           end;
-        // Требование: после шапки сделать ровно 1 строку отступа
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if s.Count> 0 then
           y := y + TextHeight('Mg');
         s.Free;
 
-  // (отступ уже сделан выше)
+  // (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)
 
-  // Вставляем строку "Пол" — выводим «Мужчины»/«Женщины», центрированно
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅ" пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   _gender := '';
   _sn := Event.ShortName;
-        if (Length(_sn) > 0) and ((_sn[Length(_sn)] = 'м') or (_sn[Length(_sn)] = 'ж')) then
+        if (Length(_sn) > 0) and ((_sn[Length(_sn)] = 'пїЅ') or (_sn[Length(_sn)] = 'пїЅ')) then
         begin
-          if _sn[Length(_sn)] = 'м' then
-            _gender := 'Мужчины'
-          else if _sn[Length(_sn)] = 'ж' then
-            _gender := 'Женщины';
+          if _sn[Length(_sn)] = 'пїЅ' then
+            _gender := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+          else if _sn[Length(_sn)] = 'пїЅ' then
+            _gender := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         end
-        else if Pos('муж', LowerCase(Event.Name)) > 0 then
-          _gender := 'Мужчины'
-        else if Pos('жен', LowerCase(Event.Name)) > 0 then
-          _gender := 'Женщины';
+        else if Pos('пїЅпїЅпїЅ', LowerCase(Event.Name)) > 0 then
+          _gender := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'
+        else if Pos('пїЅпїЅпїЅ', LowerCase(Event.Name)) > 0 then
+          _gender := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
 
         if _gender <> '' then
         begin
@@ -8822,22 +8881,22 @@ var
           y:= y+TextHeight('Mg');
         end;
 
-        // Строка «Квалификация» — центрированно отдельной строкой
-        st:= 'Квалификация';
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        st:= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         x:= (_printer.Left+_printer.Right-TextWidth (st)) div 2;
         TextOut (x,y,st);
         y:= y+TextHeight('Mg');
 
-        // Теперь — «ПРОТОКОЛ №…» по центру
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         st:= Format (PROTOCOL_NO,[ProtocolNumber]);
         x:= (_printer.Left+_printer.Right-TextWidth (st)) div 2;
         TextOut (x,y,st);
         y:= y+TextHeight ('Mg')+_printer.MM2PY (2);
 
-        // Короткое название: если справа маленькая «м»/«ж» — обрезаем этот символ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ/пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         x:= _printer.Left;
         st:= Event.ShortName;
-        if (Length(st) > 0) and ((st[Length(st)] = 'м') or (st[Length(st)] = 'ж')) then
+        if (Length(st) > 0) and ((st[Length(st)] = 'пїЅ') or (st[Length(st)] = 'пїЅ')) then
           Delete(st, Length(st), 1);
         TextOut (x,y,st);
         if Event.Name<> '' then

@@ -20,7 +20,7 @@ uses
   System.DateUtils,
   MyStrings,
   Vcl.Printers,
-  // PDF, // Временно отключено
+  // PDF, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   System.Win.Registry,
   wb_registry,
   MyLanguage,
@@ -34,12 +34,12 @@ uses
   MyTable,
   OldData;
 
-// TODO: Рейтинг в соревнованиях ИССФ
-// TODO: Интервалы Стрельбы и соревнования
-// TODO: Быстрый Объединения протокол
-// TODO: Графики в соревнованиях протоколы страниц протоколе для стрельбы - в результаты в журнал
-// TODO: Графики соревнований страниц итог с базовые (не нулевыми) и в базовых соревнованиях (нулевыми) итог
-// TODO: При стрельбы базовых итог соревнований, при стрельбы не базовыми не стрелковых не стрелковых
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅ
+// TODO: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 type
   TLanguage= (lRussian,lEnglish,lUnknown);
@@ -62,33 +62,33 @@ const
   VERSION_INFO_STR= '1.5.9.2';
 
 const
-  OUT_OF_RANK_MARK: string= 'ВЗ';
-  FINAL_MARK: string= 'Ф';
-  NOT_FOR_TEAM_MARK: string= 'ЛК';
-  PROTOCOL_MAKER_SIGN: string= 'Секретарь: _________________ (подпись, печать)';
-  DNS_MARK: string= 'неявка';
-  DELETED_CHAMPIONSHIP_MARK: string= '<удаленный чемпионат>';
-  DELETED_EVENT_MARK: string= '<удаленное упражнение>';
-  NEW_DATA_NAME: string= 'Новая база';
-  ALL_RESULTS_PDF_CAPTION: string= 'WinBASE - все результаты, %s ';
-  START_LIST_PAGE_TITLE: string= 'Стартовый протокол';
-  PAGE_NO: string= 'Страница %d';
-  PAGE_FOOTER: string= 'WinBASE %s спортивное программное обеспечение, Беларусь, 2006-2007';
-  START_LIST_CONTINUE_MARK: string= '...продолжение';
-  RF_START_TIME_1: string= 'Время  hh:mm';
-  RF_START_TIME_2: string= 'Время  hh:mm';
-  FINAL_TIME: string= 'Финал  hh:mm';
-  FINAL_DATETIME: string= 'Финал  d-mm-yyyy, hh:nn';
-  RELAY_NO: string= 'Эстафета %d';
-  MT_RELAY_NO: string= 'Микстовая %d';
-  SECRETERY_TITLE: string= 'Главный секретарь соревнований,';
-  START_LIST_PRINT_TITLE: string= 'WinBASE - стартовый протокол и результаты %s';
-  START_TIME: string= 'Старт  hh:nn';
-  CF_START_TIME_1: string= 'Старт ФР  hh:nn';
-  CF_START_DATETIME_1: string= 'Старт ФР  d-mm-yyyy, hh:nn';
-  CF_START_TIME_2: string= 'Старт ФФ  hh:nn';
-  CF_START_DATETIME_2: string= 'Старт ФФ  d-mm-yyyy, hh:nn';
-  PROTOCOL_NO: string= 'Протокол №%d';
+  OUT_OF_RANK_MARK: string= 'пїЅпїЅ';
+  FINAL_MARK: string= 'пїЅ';
+  NOT_FOR_TEAM_MARK: string= 'пїЅпїЅ';
+  PROTOCOL_MAKER_SIGN: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: _________________ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ)';
+  DNS_MARK: string= 'пїЅпїЅпїЅпїЅпїЅпїЅ';
+  DELETED_CHAMPIONSHIP_MARK: string= '<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>';
+  DELETED_EVENT_MARK: string= '<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>';
+  NEW_DATA_NAME: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ';
+  ALL_RESULTS_PDF_CAPTION: string= 'WinBASE - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, %s ';
+  START_LIST_PAGE_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+  PAGE_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  PAGE_FOOTER: string= 'WinBASE %s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 2006-2007';
+  START_LIST_CONTINUE_MARK: string= '...пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
+  RF_START_TIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  RF_START_TIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  FINAL_TIME: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:mm';
+  FINAL_DATETIME: string= 'пїЅпїЅпїЅпїЅпїЅ  d-mm-yyyy, hh:nn';
+  RELAY_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  MT_RELAY_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %d';
+  SECRETERY_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,';
+  START_LIST_PRINT_TITLE: string= 'WinBASE - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s';
+  START_TIME: string= 'пїЅпїЅпїЅпїЅпїЅ  hh:nn';
+  CF_START_TIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  hh:nn';
+  CF_START_DATETIME_1: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  d-mm-yyyy, hh:nn';
+  CF_START_TIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  hh:nn';
+  CF_START_DATETIME_2: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ  d-mm-yyyy, hh:nn';
+  PROTOCOL_NO: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ%d';
   FINAL_SHOTS_: string= 'пїЅпїЅпїЅпїЅпїЅ: ';
   FINAL_SHOOTOFF: string= '(пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s)';
   TEAM_CHAMPIONSHIP_TITLE: string= 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
@@ -141,7 +141,7 @@ const
   CLMN_POINTSREGION: string= 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ';
   CLMN_RELAY: string= 'пїЅпїЅпїЅпїЅпїЅ';
   CLMN_LANE: string= 'пїЅпїЅпїЅ';
-  SUM_STR: string= 'Сумма';
+  SUM_STR: string= 'пїЅпїЅпїЅпїЅпїЅ';
   MONTHS_STR: array [1..12] of string=
     ('пїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅ','пїЅпїЅпїЅпїЅ',
      'пїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅ','пїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
@@ -990,6 +990,7 @@ type
     property BirthYear: word read fBirthYear write set_BirthYear;
     procedure Assign (Source: TPersistent); override;
     function Shooters: TShooters;
+  function NormalizeSurname: boolean;
     property WasChanged: boolean read get_WasChanged;
     property Marked: integer read fMarked write set_Marked;
     property SportSociety: TSportSocietyItem read fSociety write set_Society;
@@ -1176,6 +1177,7 @@ type
     procedure ExportToCSV (ConsoleOutput: boolean);
     procedure ReadFromStream (Stream: TStream);
     procedure WriteToStream (Stream: TStream; SaveStartLists: boolean= true; SavePersonalInfo: boolean= true);
+    function NormalizeAllShooterSurnames: Integer;
   end;
 
   TStartListQualificationPoints= class
@@ -2028,6 +2030,13 @@ implementation
 uses
   wb_barcodes;
 
+function NormalizeShooterSurname(const Value: string): string;
+begin
+  Result := Trim(Value);
+  if Result <> '' then
+    CharUpperBuff(PChar(Result), Length(Result));
+end;
+
 procedure GetDefaultProtocolFont (var name: string; var size: integer);
 var
   Reg: TRegistry;
@@ -2176,7 +2185,7 @@ begin
   try
     SUM_STR:= Language ['SUM_STR'];
   except
-    SUM_STR:= 'Сумма'; // Безопасное значение по умолчанию
+    SUM_STR:= 'пїЅпїЅпїЅпїЅпїЅ'; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   end;
   for i:= 1 to 12 do
     MONTHS_STR [i]:= Language ['MONTHS_STR_'+IntToStr (i)];
@@ -2292,7 +2301,7 @@ var
 begin
   if S <> '' then
   begin
-    // Конвертируем Unicode в Windows-1251 для сохранения
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Unicode пїЅ Windows-1251 пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     AnsiBytes := TEncoding.GetEncoding(1251).GetBytes(S);
     l := Length(AnsiBytes);
     Stream.Write (l,sizeof (l));
@@ -2315,7 +2324,7 @@ begin
   begin
     SetLength(AnsiBytes, l);
     Stream.Read (AnsiBytes[0], l);
-    // Конвертируем из Windows-1251 в Unicode
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ Windows-1251 пїЅ Unicode
     S := TEncoding.GetEncoding(1251).GetString(AnsiBytes);
   end
   else
@@ -2335,7 +2344,7 @@ begin
   if pos ('.',s)= 0 then
     begin
       val (s,i,n);
-      if n = 0 then  // проверка успешности преобразования
+      if n = 0 then  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         Result:= i * 10;
     end
   else
@@ -5637,6 +5646,7 @@ begin
     del:= false;
   ReadStrFromStreamA (Stream,fISSFID);
   ReadStrFromStreamA (Stream,fSurname);
+  fSurname:= NormalizeShooterSurname(fSurname);
   ReadStrFromStreamA (Stream,fName);
   ReadStrFromStreamA (Stream,fStepName);
   Stream.Read (fGender,sizeof (fGender));
@@ -5781,14 +5791,14 @@ end;
 function TShooterItem.SurnameAndName (Separator: string= ','): string;
 begin
   if fName<> '' then
-    Result:= fSurname+Separator+' '+fName
+    Result:= NormalizeShooterSurname(fSurname)+Separator+' '+fName
   else
-    Result:= fSurname;
+    Result:= NormalizeShooterSurname(fSurname);
 end;
 
 function TShooterItem.SurnameAndNameAndStepName: string;
 begin
-  Result:= fSurname;
+  Result:= NormalizeShooterSurname(fSurname);
   if fName<> '' then
     Result:= Result+' '+fName;
   if fStepName<> '' then
@@ -6105,11 +6115,27 @@ begin
   fMemo:= '';
 end;
 
-procedure TShooterItem.set_Surname(const Value: string);
+function TShooterItem.NormalizeSurname: boolean;
+var
+  Normalized: string;
 begin
-  if Value<> fSurname then
+  Normalized := NormalizeShooterSurname(fSurname);
+  Result := Normalized <> fSurname;
+  if Result then
     begin
-      fSurname := Value;
+      fSurname := Normalized;
+      Changed;
+    end;
+end;
+
+procedure TShooterItem.set_Surname(const Value: string);
+var
+  Normalized: string;
+begin
+  Normalized := NormalizeShooterSurname(Value);
+  if Normalized<> fSurname then
+    begin
+      fSurname := Normalized;
       Changed;
     end;
 end;
@@ -7736,6 +7762,11 @@ begin
       fShootingChampionships.ReadFromStream (Stream);
     end;
   fGroups.ReadFromStream (Stream);
+  begin
+    var NormalizedCount := NormalizeAllShooterSurnames;
+    if NormalizedCount > 0 then
+      fChanged := true;
+  end;
   for i:= 0 to fEvents.Count-1 do
     fEvents.Items [i].CorrectTag;
   if fFileVersion>= 8 then
@@ -7754,6 +7785,34 @@ end;
 procedure TData.ResetRatings;
 begin
   fGroups.ResetRatings;
+end;
+
+function TData.NormalizeAllShooterSurnames: Integer;
+var
+  GroupIndex, ShooterIndex: Integer;
+  GroupItem: TGroupItem;
+  ShooterItem: TShooterItem;
+begin
+  Result := 0;
+  if fGroups = nil then
+    Exit;
+
+  for GroupIndex := 0 to fGroups.Count - 1 do
+  begin
+    GroupItem := fGroups.Items[GroupIndex];
+    if GroupItem = nil then
+      Continue;
+
+    for ShooterIndex := 0 to GroupItem.Shooters.Count - 1 do
+    begin
+      ShooterItem := GroupItem.Shooters.Items[ShooterIndex];
+      if ShooterItem = nil then
+        Continue;
+
+      if ShooterItem.NormalizeSurname then
+        Inc(Result);
+    end;
+  end;
 end;
 
 procedure TData.SaveToFile (FileName: TFileName; SaveStartLists: boolean= true; SavePersonalInfo: boolean= true);
@@ -8891,7 +8950,7 @@ var
 
             if (sh.DNS<> dnsCompletely) then
           begin
-            // В колонке "Место" в протоколах: при наличии финала у первых FinalPlaces ставим метку финала
+            // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ" пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ FinalPlaces пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             if (AFinal) and (HasFinal) and (sh.Index< Event.FinalPlaces) and (not sh.OutOfRank) then
               st:= FINAL_MARK
             else if sh.OutOfRank then
