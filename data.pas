@@ -1594,6 +1594,7 @@ type
     function SerieTemplate: string;
     function TotalTemplate: string;
     function CompTemplate: string;
+    function IsPairedEvent: boolean;
     property CompetitionWithTens: boolean read fCompetitionWithTens write set_CompetitionWithTens;
     // Accessors for new gold match
     function GetGoldShots1: TWordDynArray;
@@ -11141,7 +11142,15 @@ var
         cw [17]:= 0;    // ��������� � �������  (�� ��������� �������)
         Font.Style:= [];
         Font.Height:= font_height_small;
-        cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage+_printer.MM2PX (1)*(Event.SeriesPerStage-1);
+        // For paired events, need space for two sets of series plus sums
+        if IsPairedEvent then
+          begin
+            // Width for: Shooter1 series + Shooter2 series + Sums
+            cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage*2+_printer.MM2PX (1)*(Event.SeriesPerStage*2-1);
+            cw [9]:= TextWidth (SerieTemplate)*2+_printer.MM2PX (1); // Space for pair sums per stage
+          end
+        else
+          cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage+_printer.MM2PX (1)*(Event.SeriesPerStage-1);
         Font.Height:= font_height_large;
 
         for i:= 0 to Shooters.Count-1 do
@@ -14005,6 +14014,13 @@ begin
     Result:= '000.0'
   else
     Result:= '000';
+end;
+
+function TStartListEventItem.IsPairedEvent: boolean;
+begin
+  // Detect paired events by checking if shortname contains female+male marker
+  Result:= (Pos('Ж+М', Event.ShortName) > 0) or (Pos('М+Ж', Event.ShortName) > 0) or
+           (Pos('(Ж+М)', Event.ShortName) > 0) or (Pos('(М+Ж)', Event.ShortName) > 0);
 end;
 
 procedure TStartListEventItem.SaveResultsPDF(const FName: TFileName; AFinal: boolean;
