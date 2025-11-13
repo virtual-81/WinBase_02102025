@@ -1594,6 +1594,7 @@ type
     function SerieTemplate: string;
     function TotalTemplate: string;
     function CompTemplate: string;
+    function IsPairedEvent: boolean;
     property CompetitionWithTens: boolean read fCompetitionWithTens write set_CompetitionWithTens;
     // Accessors for new gold match
     function GetGoldShots1: TWordDynArray;
@@ -11141,7 +11142,15 @@ var
         cw [17]:= 0;    // ��������� � �������  (�� ��������� �������)
         Font.Style:= [];
         Font.Height:= font_height_small;
-        cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage+_printer.MM2PX (1)*(Event.SeriesPerStage-1);
+        // For paired events, need space for two sets of series plus sums
+        if IsPairedEvent then
+          begin
+            // Width for: Shooter1 series + Shooter2 series + Sums
+            cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage*2+_printer.MM2PX (1)*(Event.SeriesPerStage*2-1);
+            cw [9]:= TextWidth (SerieTemplate)*2+_printer.MM2PX (1); // Space for pair sums per stage
+          end
+        else
+          cw [8]:= TextWidth (SerieTemplate)*Event.SeriesPerStage+_printer.MM2PX (1)*(Event.SeriesPerStage-1);
         Font.Height:= font_height_large;
 
         for i:= 0 to Shooters.Count-1 do
@@ -11609,6 +11618,8 @@ var
 var
   sh: TStartListEventShooterItem;
   havefinalfracs: boolean;         // ��� ������ ��� ������������ ���� � �������� ��������
+  sh_pair: TStartListEventShooterItem; // Second shooter in pair for paired events
+  is_pair_first: boolean;          // True if current shooter is first in a pair
 
   function MeasureItemHeight: integer;
   var
@@ -11707,6 +11718,8 @@ var
         Font.Height:= font_height_large;
         Font.Style:= [fsBold];
         st:= sh.Shooter.Surname;
+        if IsPairedEvent and (sh_pair <> nil) then
+          st:= st + ' / ' + sh_pair.Shooter.Surname;
         TextOut (x,y,st);
         Font.Height:= font_height_small;
         Font.Style:= [];
@@ -11714,6 +11727,13 @@ var
           st:= sh.Shooter.Name+' '+sh.Shooter.StepName
         else
           st:= sh.Shooter.Name;
+        if IsPairedEvent and (sh_pair <> nil) then
+          begin
+            if sh_pair.Shooter.StepName<> '' then
+              st:= st + ' / ' + sh_pair.Shooter.Name+' '+sh_pair.Shooter.StepName
+            else
+              st:= st + ' / ' + sh_pair.Shooter.Name;
+          end;
         TextOut (x,y+thl,st);
         cx:= cx+cw [2];
 
@@ -11780,6 +11800,8 @@ var
                 else  }
                   y1:= y+thl-ths+(j-1)*ths;
                 Font.Style:= [];
+                
+                // Print first shooter's series
                 for i:= 1 to Event.SeriesPerStage do
                   begin
                     st:= sh.SerieStr (j,i);
@@ -11787,10 +11809,43 @@ var
                     x:= cx+(xsep div 2)+i*TextWidth (SerieTemplate)+(i-1)*_printer.MM2PX (1)-w;
                     TextOut (x,y1,st);
                   end;
+                
+                // For paired events, print second shooter's series and sums
+                if IsPairedEvent and (sh_pair <> nil) then
+                  begin
+                    // Print second shooter's series
+                    for i:= 1 to Event.SeriesPerStage do
+                      begin
+                        st:= sh_pair.SerieStr (j,i);
+                        w:= TextWidth (st);
+                        x:= cx+(xsep div 2)+(Event.SeriesPerStage+i)*TextWidth (SerieTemplate)+
+                            (Event.SeriesPerStage+i-1)*_printer.MM2PX (1)-w;
+                        TextOut (x,y1,st);
+                      end;
+                    
+                    // Print series sums for the pair
+                    Font.Style:= [fsBold];
+                    for i:= 1 to Event.SeriesPerStage do
+                      begin
+                        // Calculate sum of series i for both shooters
+                        st:= CompetitionStr (sh.Series10 [j,i] + sh_pair.Series10 [j,i]);
+                        w:= TextWidth (st);
+                        x:= cx+(xsep div 2)+(Event.SeriesPerStage*2+i)*TextWidth (SerieTemplate)+
+                            (Event.SeriesPerStage*2+i-1)*_printer.MM2PX (1)-w;
+                        TextOut (x,y1,st);
+                      end;
+                  end;
+                
                 if (Event.Stages> 1) and (Event.SeriesPerStage> 1) then
                   begin
                     Font.Style:= [fsBold];
-                    st:= sh.StageResultStr(j);
+                    if IsPairedEvent and (sh_pair <> nil) then
+                      begin
+                        // For pairs, show combined stage result
+                        st:= CompetitionStr (sh.StageResults10 (j) + sh_pair.StageResults10 (j));
+                      end
+                    else
+                      st:= sh.StageResultStr(j);
                     w:= TextWidth (st);
                     x:= cx+cw [8]+cw [9]-(xsep div 2)-w;
                     TextOut (x,y1,st);
@@ -11890,7 +11945,14 @@ var
             // ��������� ��������
             Font.Height:= font_height_large;
             Font.Style:= [fsBold];
-            st:= sh.CompetitionStr;
+            
+            if IsPairedEvent and (sh_pair <> nil) then
+              begin
+                // For paired events, show combined competition result
+                st:= CompetitionStr (sh.Competition10 + sh_pair.Competition10);
+              end
+            else
+              st:= sh.CompetitionStr;
 {            w:= TextWidth (st);
             if (havefinalfracs) or
                ((AFinal) and (Event.FinalFracs) and
@@ -13202,17 +13264,56 @@ begin // PrintResults
 
   page_idx:= 1;
   MakeNewPage;
-  for i:= 0 to Shooters.Count-1 do
+  
+  if IsPairedEvent then
     begin
-      sh:= Shooters.Items [i];
-      lineheight:= MeasureItemHeight;
-      if y+lineheight> _printer.Bottom-footerheight then
+      // For paired events, process shooters in pairs
+      i:= 0;
+      while i< Shooters.Count do
         begin
-          inc (page_idx);
-          MakeNewPage;
+          sh:= Shooters.Items [i];
+          is_pair_first:= (i mod 2 = 0);
+          
+          // Get the pair partner if this is first in pair and partner exists
+          if is_pair_first and (i+1 < Shooters.Count) then
+            sh_pair:= Shooters.Items [i+1]
+          else
+            sh_pair:= nil;
+            
+          lineheight:= MeasureItemHeight;
+          if y+lineheight> _printer.Bottom-footerheight then
+            begin
+              inc (page_idx);
+              MakeNewPage;
+            end;
+          PrintShooterItem;
+          inc (y,lineheight+ysep);
+          
+          // For paired events, skip printing second shooter individually
+          // (it's already printed as part of the pair)
+          if is_pair_first and (sh_pair <> nil) then
+            inc (i,2)  // Skip both shooters
+          else
+            inc (i);   // Just move to next
         end;
-      PrintShooterItem;
-      inc (y,lineheight+ysep);
+    end
+  else
+    begin
+      // For non-paired events, process normally
+      for i:= 0 to Shooters.Count-1 do
+        begin
+          sh:= Shooters.Items [i];
+          sh_pair:= nil;
+          is_pair_first:= false;
+          lineheight:= MeasureItemHeight;
+          if y+lineheight> _printer.Bottom-footerheight then
+            begin
+              inc (page_idx);
+              MakeNewPage;
+            end;
+          PrintShooterItem;
+          inc (y,lineheight+ysep);
+        end;
     end;
 
   if ATeams then
@@ -14005,6 +14106,13 @@ begin
     Result:= '000.0'
   else
     Result:= '000';
+end;
+
+function TStartListEventItem.IsPairedEvent: boolean;
+begin
+  // Detect paired events by checking if shortname contains female+male marker
+  Result:= (Pos('Ж+М', Event.ShortName) > 0) or (Pos('М+Ж', Event.ShortName) > 0) or
+           (Pos('(Ж+М)', Event.ShortName) > 0) or (Pos('(М+Ж)', Event.ShortName) > 0);
 end;
 
 procedure TStartListEventItem.SaveResultsPDF(const FName: TFileName; AFinal: boolean;
